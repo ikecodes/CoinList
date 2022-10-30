@@ -6,6 +6,6 @@ export interface ICoinItem {
   item: {
     pair: string;
     key: string;
-    rate: string;
+    rate: number;
   };
 }

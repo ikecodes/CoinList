@@ -1,6 +1,6 @@
-import {View, StyleSheet, TextInput, FlatList} from 'react-native';
+import {View, StyleSheet, TextInput, FlatList, Animated} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../config/colors';
 import CoinItem from '../../components/CoinItem';
@@ -11,39 +11,41 @@ import Loader from '../../components/Loader';
 interface ICoins {
   pair: string;
   key: string;
-  rate: string;
+  rate: number;
 }
 type HomeScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
 
-// const coins: ICoins[] = [
-//   {
-//     name: 'Bitcoin',
-//     key: 1,
-//   },
-//   {
-//     name: 'Litecoin',
-//     key: 2,
-//   },
-//   {
-//     name: 'Dash',
-//     key: 3,
-//   },
-// ];
-
 const Home: FC<HomeScreenProps> = props => {
   const {navigation} = props;
-  const [coins, setCoins] = useState();
+  const scaleAnimation = useRef(new Animated.Value(-1)).current;
+  const [coins, setCoins] = useState<ICoins[]>([]);
+  const [filteredData, setFilteredData] = useState<ICoins[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
 
+  function searchFilter(text: string) {
+    if (text) {
+      const newData = coins.filter(item => {
+        const itemData = item.pair ? item.pair.toUpperCase() : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
+    } else {
+      setFilteredData(coins);
+      setSearch(text);
+    }
+  }
   const renderCoinItem: FC<ICoinItem> = useCallback(
-    ({item}) => <CoinItem item={item} navigation={navigation} />,
+    ({item}) => (
+      <CoinItem item={item} navigation={navigation} setSearch={setSearch} />
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const renderSeparator = () => <View style={styles.separator} />;
 
   async function getCoins() {
-    console.log('CALLING');
     try {
       setLoading(true);
       const {data} = await axios.get(
@@ -59,42 +61,51 @@ const Home: FC<HomeScreenProps> = props => {
           key: rates[key].key,
         });
       }
-
-      console.log('PAIRS', currencyPairs);
+      setFilteredData(currencyPairs);
+      setCoins(currencyPairs);
     } catch (error: any) {
       console.log(error);
     }
   }
   useEffect(() => {
     getCoins();
-  }, []);
+    Animated.spring(scaleAnimation, {
+      toValue: 20,
+      useNativeDriver: true,
+    }).start();
+  }, [scaleAnimation]);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.inputContainer}>
+        <Animated.View
+          style={[
+            styles.inputContainer,
+            {transform: [{translateY: scaleAnimation}]},
+          ]}>
           <View style={styles.iconContainer}>
             <Icon name="search" size={20} color={colors.white} />
           </View>
           <TextInput
             style={styles.inputStyle}
             placeholder="Search"
+            value={search}
+            onChangeText={text => searchFilter(text)}
             placeholderTextColor={colors.white}
           />
-        </View>
+        </Animated.View>
       </View>
       <View style={styles.bottom}>
         <FlatList
-          data={coins}
+          data={filteredData}
           renderItem={renderCoinItem}
-          keyExtractor={(_, i) => i.toString()}
+          keyExtractor={item => item.key}
           removeClippedSubviews={true}
           maxToRenderPerBatch={30}
           updateCellsBatchingPeriod={0}
           initialNumToRender={30}
           windowSize={21}
           onEndReachedThreshold={0.01}
-          ItemSeparatorComponent={renderSeparator}
         />
       </View>
       {loading && <Loader />}
@@ -108,7 +119,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: colors.primary,
-    height: '20%',
+    height: 150,
     display: 'flex',
     justifyContent: 'flex-end',
   },
@@ -118,11 +129,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
     borderColor: colors.white,
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    transform: [{translateY: 25}],
   },
   iconContainer: {
     marginHorizontal: 5,

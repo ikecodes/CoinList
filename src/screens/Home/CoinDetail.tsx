@@ -10,14 +10,15 @@ const CoinDetail: FC<CoinDetailScreenProps> = props => {
   function handleBack() {
     props.navigation.goBack();
   }
+  const {pair, rate}: any = props.route.params;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backIcon} onPress={handleBack}>
           <Icon name="chevron-back" size={35} color={colors.white} />
         </TouchableOpacity>
-        <Text style={styles.pairs}>BTC</Text>
-        <Text style={styles.rate}>17777.7777</Text>
+        <Text style={styles.pairs}>{pair}</Text>
+        <Text style={styles.rate}>{rate}</Text>
       </View>
     </View>
   );
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   },
   pairs: {
     color: colors.white,
-    fontSize: 50,
+    fontSize: 40,
   },
   rate: {
     color: colors.secondary,

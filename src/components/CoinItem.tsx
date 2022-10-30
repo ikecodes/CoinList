@@ -1,18 +1,23 @@
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {FC} from 'react';
+import React, {Dispatch, FC, SetStateAction} from 'react';
 import colors from '../config/colors';
 
 interface ICoinItem {
-  navigation: any;
+  setSearch: Dispatch<SetStateAction<string>>;
   item: {
     pair: string;
     key: string;
-    rate: string;
+    rate: number;
   };
+  navigation: any;
 }
-const CoinItem: FC<ICoinItem> = ({navigation, item}) => {
-  function handlePress() {
-    navigation.navigate('CoinDetail');
+const CoinItem: FC<ICoinItem> = ({navigation, item, setSearch}) => {
+  async function handlePress() {
+    navigation.navigate('CoinDetail', {
+      pair: item.pair as string,
+      rate: item.rate as number,
+    });
+    setSearch('');
   }
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
@@ -23,13 +28,21 @@ const CoinItem: FC<ICoinItem> = ({navigation, item}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 15,
-    paddingHorizontal: 1,
-    // marginVertical: 5,
+    padding: 15,
+    borderRadius: 16,
+    marginVertical: 5,
+    backgroundColor: colors.white,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
   },
   text: {
     color: colors.gray,
-    fontSize: 20,
+    fontSize: 15,
   },
 });
 
