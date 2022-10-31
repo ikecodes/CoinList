@@ -1,6 +1,6 @@
 import {device, by, expect, element} from 'detox';
 
-describe('Example', () => {
+describe('CoinList', () => {
   beforeAll(async () => {
     await device.launchApp();
   });

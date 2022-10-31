@@ -74,7 +74,7 @@
       "simulator": {
         "type": "ios.simulator",
         "device": {
-          "type": "iPhone 14 Pro"
+          "type": "iPhone 13"
         }
       }
     },
@@ -89,11 +89,17 @@
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
         "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd .."
       },
+      "ios.debug": {
+        "name": "CoinList",
+        "type": "ios.app",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/CoinList.app",
+        "build": "xcodebuild -workspace ios/CoinList.xcworkspace -UseNewBuildSystem=YES -scheme -configuration Debug CoinList -sdk iphonesimulator -derivedDataPath ios/build"
+      },
       "ios.release": {
         "name": "CoinList",
         "type": "ios.app",
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/CoinList.app",
-        "build": "xcodebuild -project ios/CoinList.xcodeproj -scheme CoinList -sdk iphonesimulator -derivedDataPath ios/build"
+        "build": "xcodebuild -workspace ios/CoinList.xcworkspace -UseNewBuildSystem=YES -scheme -configuration Release CoinList -sdk iphonesimulator -derivedDataPath ios/build"
       }
     },
     "configurations": {
@@ -104,6 +110,10 @@
       "android.emu.release": {
         "device": "emulator",
         "app": "android.release"
+      },
+      "ios.sim.debug": {
+        "device": "simulator",
+        "app": "ios.debug"
       },
       "ios.sim.release": {
         "device": "simulator",
