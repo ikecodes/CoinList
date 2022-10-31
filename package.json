@@ -7,7 +7,15 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "e2e:android-debug": "detox test -c android.emu.debug",
+    "e2e:ios-debug": "detox test -c ios.sim.debug",
+    "e2e:ios": "detox test -c ios.sim.release",
+    "e2e:android": "detox test -c android.emu.release",
+    "build:ios": "detox build -c ios.sim.release",
+    "build:ios-debug": "detox build -c ios.sim.debug",
+    "build:android": "detox build -c android.emu.release",
+    "build:android-debug": "detox build -c android.emu.debug"
   },
   "dependencies": {
     "@react-navigation/native": "^6.0.13",
@@ -62,6 +70,12 @@
         "device": {
           "avdName": "Pixel4"
         }
+      },
+      "simulator": {
+        "type": "ios.simulator",
+        "device": {
+          "type": "iPhone 14 Pro"
+        }
       }
     },
     "apps": {
@@ -74,6 +88,12 @@
         "type": "android.apk",
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
         "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd .."
+      },
+      "ios.release": {
+        "name": "CoinList",
+        "type": "ios.app",
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/CoinList.app",
+        "build": "xcodebuild -project ios/CoinList.xcodeproj -scheme CoinList -sdk iphonesimulator -derivedDataPath ios/build"
       }
     },
     "configurations": {
@@ -84,6 +104,10 @@
       "android.emu.release": {
         "device": "emulator",
         "app": "android.release"
+      },
+      "ios.sim.release": {
+        "device": "simulator",
+        "app": "ios.release"
       }
     }
   }

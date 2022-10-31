@@ -9,17 +9,17 @@ describe('Example', () => {
     await device.reloadReactNative();
   });
 
-  it('should have home screen', async () => {
-    await expect(element(by.text('Home'))).toBeVisible();
+  it('should load home screen', async () => {
+    await expect(element(by.id('home-screen'))).toExist();
   });
 
-  // it('should show hello screen after tap', async () => {
-  //   await element(by.id('hello_button')).tap();
-  //   await expect(element(by.text('Hello!!!'))).toBeVisible();
-  // });
+  it('should return matching coin pairs on search', async () => {
+    await element(by.id('textField')).replaceText('btcng');
+    await expect(element(by.text('BTCNGN'))).toBeVisible();
+  });
 
-  // it('should show world screen after tap', async () => {
-  //   await element(by.id('world_button')).tap();
-  //   await expect(element(by.text('World!!!'))).toBeVisible();
-  // });
+  it('should show coin detail screen after coin tap', async () => {
+    await element(by.id('coin-item')).atIndex(2).tap();
+    await expect(element(by.id('detail-screen'))).toExist();
+  });
 });

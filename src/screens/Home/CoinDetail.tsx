@@ -12,7 +12,7 @@ const CoinDetail: FC<CoinDetailScreenProps> = props => {
   }
   const {pair, rate}: any = props.route.params;
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="detail-screen">
       <View style={styles.header}>
         <TouchableOpacity style={styles.backIcon} onPress={handleBack}>
           <Icon name="chevron-back" size={35} color={colors.white} />

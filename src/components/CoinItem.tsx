@@ -20,7 +20,10 @@ const CoinItem: FC<ICoinItem> = ({navigation, item, setSearch}) => {
     setSearch('');
   }
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
+    <TouchableOpacity
+      testID="coin-item"
+      onPress={handlePress}
+      style={styles.container}>
       <Text style={styles.text}>{item.pair}</Text>
     </TouchableOpacity>
   );

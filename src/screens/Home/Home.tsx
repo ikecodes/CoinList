@@ -1,4 +1,11 @@
-import {View, StyleSheet, TextInput, FlatList, Animated} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  FlatList,
+  Animated,
+  Text,
+} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -76,8 +83,9 @@ const Home: FC<HomeScreenProps> = props => {
   }, [scaleAnimation]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="home-screen">
       <View style={styles.header}>
+        <Text>Search</Text>
         <Animated.View
           style={[
             styles.inputContainer,
@@ -87,6 +95,7 @@ const Home: FC<HomeScreenProps> = props => {
             <Icon name="search" size={20} color={colors.white} />
           </View>
           <TextInput
+            testID="textField"
             style={styles.inputStyle}
             placeholder="Search"
             value={search}
