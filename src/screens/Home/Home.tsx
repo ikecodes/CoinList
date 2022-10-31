@@ -1,11 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  Animated,
-  Text,
-} from 'react-native';
+import {View, StyleSheet, TextInput, FlatList, Animated} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -85,7 +78,6 @@ const Home: FC<HomeScreenProps> = props => {
   return (
     <View style={styles.container} testID="home-screen">
       <View style={styles.header}>
-        <Text>Search</Text>
         <Animated.View
           style={[
             styles.inputContainer,
@@ -108,6 +100,7 @@ const Home: FC<HomeScreenProps> = props => {
         <FlatList
           data={filteredData}
           renderItem={renderCoinItem}
+          contentContainerStyle={styles.contentContainer}
           keyExtractor={item => item.key}
           removeClippedSubviews={true}
           maxToRenderPerBatch={30}
@@ -160,6 +153,9 @@ const styles = StyleSheet.create({
   separator: {
     backgroundColor: '#e0e0e0',
     height: 2,
+  },
+  contentContainer: {
+    padding: 10,
   },
 });
 

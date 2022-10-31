@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 10,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
   },
   text: {
     color: colors.gray,
